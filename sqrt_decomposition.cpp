@@ -94,7 +94,7 @@ int main()
 
         obj.init();
         obj.build(a);
-        cout << obj.query(0, n - 1) << endl;;
+        cout << obj.query(0, n - 1) << endl;
     }
 
     return 0;
