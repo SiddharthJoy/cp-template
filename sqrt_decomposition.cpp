@@ -46,38 +46,33 @@ struct sqrt_decomposition
     {
         blocks[idx / block_size] += (val - a[idx]);
         a[idx] = val;
-
-        forr(i, 0, block_size) {
-            cout << blocks[i] << " ";
-        }
     }
 
     int query(int l, int r)
     {
-        int nxt_block_idx = ((l / block_size) + 1) * block_size;
-        int scnd_block = nxt_block_idx / block_size;
-        int lst_block = r / block_size;
-        int lst_block_idx = lst_block * block_size;
-
         int sum = 0;
+        int c_l = l / block_size,   c_r = r / block_size;
+        if (c_l == c_r)
+            for (int i = l; i <= r; ++i) sum += a[i];       ///if the range is in the same block
 
-        forr(i, l, min(r + 1, nxt_block_idx)) sum += a[i];
+        else {
+            for (int i = l, end = (c_l + 1) * block_size - 1; i <= end; ++i) sum += a[i];
 
-        if (scnd_block  > lst_block) return sum;    ///l and r in same block
+            for (int i = c_l + 1; i <= c_r - 1; ++i) sum += blocks[i];
 
-        forr(i, scnd_block, lst_block) sum += blocks[i];
-
-        forr(i, lst_block_idx, r + 1) sum += a[i];
+            for (int i = c_r * block_size; i <= r; ++i) sum += a[i];
+        }
 
         return sum;
     }
+
 } obj;
 
 int main()
 {
     faster_io
 
-    int  t = 1;
+    int  t = 1, m, l, r;
 #ifndef ONLINE_JUDGE
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
@@ -94,7 +89,13 @@ int main()
 
         obj.init();
         obj.build(a);
-        cout << obj.query(0, n - 1) << endl;
+
+        cin >> m;
+
+        while (m--) {
+            cin >> l >> r;
+            cout << obj.query(--l, --r) << endl;
+        }
     }
 
     return 0;
