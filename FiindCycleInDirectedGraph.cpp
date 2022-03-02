@@ -12,3 +12,6 @@ int dfs(int v) {
     used[v] = 2;
     return 0;
 }
+
+// returns 1 if the connected component has any cycle
+// used in cf-1411C
